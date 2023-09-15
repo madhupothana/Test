@@ -1,0 +1,12 @@
+com\example\HIMS\HRepository.class
+com\example\HIMS\HimsDao.class
+com\example\HIMS\HimsController.class
+com\example\HIMS\Insurance.class
+com\example\HIMS\IRepository.class
+com\example\HIMS\AppConfig.class
+com\example\HIMS\NetworkHospitals.class
+com\example\HIMS\NetworkHospitalsMapper.class
+com\example\HIMS\HimsApplication.class
+com\example\HIMS\HimsDaoImpl.class
+com\example\HIMS\User.class
+com\example\HIMS\InsuranceMapper.class
