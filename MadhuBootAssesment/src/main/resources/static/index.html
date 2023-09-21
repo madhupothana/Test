@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Assessment</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body style="background-color: skyblue;">
+    <center>
+        <h1>Book CRUD</h1><br>
+
+        <br>
+        <button id="getPublishers">Get All Publishers</button>
+        <br><br>
+        <table id="list" border="1px">
+
+        </table>
+
+        <script>
+            $(document).ready(function () {
+                $("#getPublishers").click(function () {
+                    $.ajax({
+                        type: "GET",
+                        url: "/getpublishers",
+                        dataType: "json",
+                        success: function (data) {
+                            console.log(data);
+
+                            // Clear the existing table body
+                            var table = $("#list");
+                            table.html("");
+
+                            var tablehead = $("<thead>");
+                            var row = $("<tr>");
+                            var td1 = $("<th>").text("Publisher ID");
+                            var td2 = $("<th>").text("Publisher Name");
+                            var td3 = $("<th>").text("Open");
+
+                            row.append(td1, td2, td3);
+                            tablehead.append(row);
+                            table.append(tablehead);
+
+                            $.each(data, function (index, x) {
+                                console.log(x);
+                                var body = $("<tr>");
+                                var td1 = $("<td>").text(x.id);
+                                var td2 = $("<td>").text(x.name);
+                                var td7 = $("<td>").html('<a href="index2.html">Open</a>');
+                                body.append(td1, td2, td7);
+                                table.append(body);
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
+    </center>
+</body>
+</html>

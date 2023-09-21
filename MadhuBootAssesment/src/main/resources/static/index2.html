@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>My Assesment</title>
+</head>
+
+<body style="background-color: skyblue;">
+	<center>
+		<h1>Book CRUD</h1><br>
+		<label>Book No:</label><input type="text" id="id"><br>
+		<label>Publisher No:</label><input type="text" id="p_id"><br>
+		<label>Book Name:</label><input type="text" id="name"><br>
+		<label>Price:</label><input type="text" id="price"><br>
+		<label>Author:</label><input type="text" id="author"><br>
+		<br>
+		<button onclick="getBooks()">GetAllBooks</button>
+		<button onclick="AddBook()">AddBook</button>
+		<button onclick="save()">Save</button>
+		<br><br>
+		<table id="list" border="1px">
+
+		</table>
+
+		<script>
+			function AddBook() {
+				// Get data from your HTML form or input fields
+
+				var empData = {
+					id: document.getElementById("id").value,
+					p_id: document.getElementById("p_id").value,
+					name: document.getElementById("name").value,
+					author: document.getElementById("author").value,
+					price: document.getElementById("price").value
+
+				};
+				console.log(empData);
+
+				// Create an XMLHttpRequest object
+				var xhr = new XMLHttpRequest();
+
+				// Configure the request
+				xhr.open("POST", "/addbook", true); // Replace with the actual URL
+
+				// Set the request header to specify JSON content
+				xhr.setRequestHeader("Content-Type", "application/json");
+
+				// Convert the JavaScript object to a JSON string
+				var jsonData = JSON.stringify(empData);
+				console.log(jsonData);
+
+				// Set up a callback function to handle the response
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4) { // Check if the request is complete
+						if (xhr.status === 201) { // Check if the response status is "Created"
+							alert("Book is added successfully");
+							// You can perform additional actions here if needed
+						} else {
+							alert("Failed to add book"); // Handle the error case
+						}
+					}
+				};
+
+				// Send the JSON data as the request body
+				xhr.send(jsonData);
+				getBooks();
+			}
+			function getBooks() {
+				var a = new XMLHttpRequest();
+				a.open("GET", "/getbooks", true);
+				a.send();
+				a.onreadystatechange = function () {
+					if (a.readyState === 4) { // Check if the request is complete
+						if (a.status === 200) {
+							var data = JSON.parse(a.responseText);
+							console.log(data);
+
+
+							// Clear the existing table body
+
+							var table = document.getElementById("list");
+							table.innerHTML = ``;
+							var tablebody = document.createElement("tbody");
+							var tablehead = document.createElement("thead");
+							var headers = document.createElement("th");
+							var row = document.createElement("tr");
+							var body = document.createElement('tr');
+							var td1 = document.createElement('th');
+							var td2 = document.createElement('th');
+							var td3 = document.createElement('th');
+							var td4 = document.createElement('th');
+							var td5 = document.createElement('th');
+							var td6 = document.createElement('th');
+							var td7 = document.createElement('th');
+							td1.textContent = "Book Id";
+							td2.textContent = "Publisher Id";
+							td3.textContent = "Book Name";
+							td4.textContent = "Author";
+							td5.textContent = "Price";
+							td6.textContent = "Delete";
+							td7.textContent = "Update";
+							row.appendChild(td1);
+							row.appendChild(td2);
+							row.appendChild(td3);
+							row.appendChild(td4);
+							row.appendChild(td5);
+							row.appendChild(td6);
+							row.appendChild(td7);
+							tablehead.appendChild(row);
+							table.append(tablehead);
+
+
+
+
+
+							data.forEach(function (x) {
+								console.log(x);
+								var body = document.createElement('tr');
+								var td1 = document.createElement('td');
+								var td2 = document.createElement('td');
+								var td3 = document.createElement('td');
+								var td4 = document.createElement('td');
+								var td5 = document.createElement('td');
+								var td6 = document.createElement('td');
+								var td7 = document.createElement('button');
+								var td8 = document.createElement('button');
+								var td9 = document.createElement('td');
+								td1.textContent = x.id;
+								td2.textContent = x.p_id;
+								td3.textContent = x.name;
+								td4.textContent = x.author;
+								td5.textContent = x.price;
+								td7.textContent = "Delete";
+								td7.onclick = function () {
+
+									deleteBook(x.id);
+								};
+								td8.textContent = "Update";
+								td8.onclick = function () {
+
+									updateBook(x);
+								};
+
+								// Append the button to the table cell
+								td6.appendChild(td7);
+								td9.appendChild(td8);
+								body.appendChild(td1);
+
+								body.appendChild(td2);
+								body.appendChild(td3);
+								body.appendChild(td4);
+								body.appendChild(td5);
+								body.appendChild(td6);
+								body.appendChild(td9);
+								tablebody.appendChild(body);
+
+							});
+							table.append(tablebody);
+						}
+					}
+				}
+			}
+			function deleteBook(id) {
+				var a = new XMLHttpRequest();
+				a.open("DELETE", "/deletebook/" + id, true);
+				a.send();
+				a.onreadystatechange = function () {
+					if (a.readyState === 4) { // Check if the request is complete
+						if (a.status === 200) {
+							alert("deleted");
+						}
+					}
+				}
+				getBooks();
+			}
+
+			function updateBook(x) {
+
+				document.getElementById("id").value = x.id;
+				document.getElementById("p_id").value = x.p_id;
+				document.getElementById("name").value = x.name;
+				document.getElementById("author").value = x.author;
+				document.getElementById("price").value = x.price;
+
+			}
+
+
+
+
+
+
+
+			function save() {
+				// Get data from your HTML form or input fields
+				var id = document.getElementById("id").value;
+
+				var empData = {
+					id: document.getElementById("id").value,
+					p_id: document.getElementById("p_id").value,
+					name: document.getElementById("name").value,
+					author: document.getElementById("author").value,
+					price: document.getElementById("price").value
+
+				};
+				console.log(empData);
+
+				// Create an XMLHttpRequest object
+				var xhr = new XMLHttpRequest();
+
+				// Configure the request
+				xhr.open("PUT", "/updatebook/" + id, true); // Replace with the actual URL
+
+				// Set the request header to specify JSON content
+				xhr.setRequestHeader("Content-Type", "application/json");
+
+				// Convert the JavaScript object to a JSON string
+				var jsonData = JSON.stringify(empData);
+				console.log(jsonData);
+
+				// Set up a callback function to handle the response
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4) { // Check if the request is complete
+						if (xhr.status === 200) { // Check if the response status is "Created"
+							alert("Book is UPdated successfully");
+							// You can perform additional actions here if needed
+						} else {
+							alert("Failed to UPdate Book"); // Handle the error case
+						}
+					}
+				};
+
+				// Send the JSON data as the request body
+				xhr.send(jsonData);
+				getBooks();
+			}
+
+		</script>
+	</center>
+</body>
+
+</html>
